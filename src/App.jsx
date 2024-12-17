@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import TodoList from './TodoList';  // Import TodoList component
 import AddTodoForm from './AddTodoForm';
 
@@ -10,7 +10,6 @@ function App() {
     setTodoList([...todoList, newTodo]);
   }
   
-
   return (
     <div>
       <h1>Todo List</h1>
