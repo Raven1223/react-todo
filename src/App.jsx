@@ -23,13 +23,21 @@ function App() {
   function addTodo(newTodo) {
     setTodoList([...todoList, newTodo]);
   }
+
+  // New removeTodo function
+  function removeTodo(id) {
+    // Remove the item with the given id from todoList
+    const newTodoList = todoList.filter((todo) => todo.id !== id);
+    // Update the state with the new list
+    setTodoList(newTodoList);
+  }
   
   //replaced the outer <div> with fragment
   return (
     <Fragment> 
       <h1>Todo List</h1>
       <AddTodoForm onAddTodo={addTodo} />
-      <TodoList todoList={todoList} />
+      <TodoList todoList={todoList} onRemoveTodo={removeTodo} />
     </Fragment>
   );
 }
