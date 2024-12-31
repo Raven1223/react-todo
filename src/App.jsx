@@ -2,26 +2,32 @@ import React, { useState, useEffect, Fragment } from 'react'; // Import useState
 import TodoList from './TodoList';  // Import TodoList component
 import AddTodoForm from './AddTodoForm';
 
-// Custom hook for semi-persistent state
-function useSemiPersistentState() {
+function App() {
   // Create new state variable for todoList, initializing from localStorage
   const [todoList, setTodoList] = useState(() => {
-    const savedTodoList = localStorage.getItem('savedTodoList');
-    return savedTodoList ? JSON.parse(savedTodoList) : [];
+  const savedTodoList = localStorage.getItem('savedTodoList');
+  return savedTodoList ? JSON.parse(savedTodoList) : [];
   });
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    localStorage.setItem('savedTodoList', JSON.stringify(todoList));  //save the todoList inside localStorage with the key "savedTodoList"
-  }, [todoList]);
+  new Promise((resolve, reject) => {
+  setTimeout(() => {
+  resolve();
+  }, 2000);
+  }).then(() => {
+  setIsLoading(false); //set to false after 2 seconds
+  });
+  }, []);
 
-  return [todoList, setTodoList];
-}
-
-function App() {
-  const [todoList, setTodoList] = useSemiPersistentState();
+  useEffect(() => {
+  if (!isLoading) {
+  localStorage.setItem('savedTodoList', JSON.stringify(todoList));  //save the todoList inside localStorage with the key "savedTodoList"
+  }
+  }, [todoList, isLoading]);
 
   function addTodo(newTodo) {
-    setTodoList([...todoList, newTodo]);
+  setTodoList([...todoList, newTodo]);
   }
 
   // New removeTodo function
@@ -34,11 +40,15 @@ function App() {
   
   //replaced the outer <div> with fragment
   return (
-    <Fragment> 
-      <h1>Todo List</h1>
-      <AddTodoForm onAddTodo={addTodo} />
-      <TodoList todoList={todoList} onRemoveTodo={removeTodo} />
-    </Fragment>
+  <Fragment> 
+  <h1>Todo List</h1>
+  <AddTodoForm onAddTodo={addTodo} />
+  {isLoading ? (
+  <p>Loading...</p>
+  ) : (
+  <TodoList todoList={todoList} onRemoveTodo={removeTodo}/>
+  )}
+  </Fragment>
   );
 }
 
