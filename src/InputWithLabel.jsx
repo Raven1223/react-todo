@@ -11,16 +11,16 @@ const InputWithLabel = ({ todoTitle, handleTitleChange, children }) => {
   }); // No dependency array means this effect runs after every render
 
   return (
-    <React.Fragment>
-      <label htmlFor="todoTitle">{children}</label>
-      <input 
-        ref={inputRef} // Attach the ref to the input element
-        id="todoTitle" 
-        name="title"
-        value={todoTitle}
-        onChange={handleTitleChange}
-      />
-    </React.Fragment>
+  <React.Fragment>
+  <label htmlFor="todoTitle">{children}</label>
+  <input 
+  ref={inputRef} // Attach the ref to the input element
+  id="todoTitle" 
+  name="title"
+  value={todoTitle}
+  onChange={handleTitleChange}
+  />
+  </React.Fragment>
   );
 };
 
