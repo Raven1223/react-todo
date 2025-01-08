@@ -1,60 +1,66 @@
-import React, { useState, useEffect, Fragment } from 'react'; // Import useState, useEffect, and Fragment
-import TodoList from './TodoList';  // Import TodoList component
+import React, { useState, useEffect, Fragment } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom'; // Import BrowserRouter, Routes, and Route from react-router-dom
+import TodoList from './TodoList';
 import AddTodoForm from './AddTodoForm';
+import axios from 'axios'; //from Textbook, not being used currently 
 //const apiKey = import.meta.env.VITE_API_KEY; //import API key from environment file
 //const apiUrl = import.meta.env.VITE_API_URL; //import API URL from env file
 
-
 function App() {
   // Create new state variable for todoList, initializing from localStorage
-  const [todoList, setTodoList] = useState(() => {
-  const savedTodoList = localStorage.getItem('savedTodoList');
-  return savedTodoList ? JSON.parse(savedTodoList) : [];
-  });
-  const [isLoading, setIsLoading] = useState(true);
+const [todoList, setTodoList] = useState(() => {
+const savedTodoList = localStorage.getItem('savedTodoList');
+return savedTodoList ? JSON.parse(savedTodoList) : [];
+});
+const [isLoading, setIsLoading] = useState(true);
   
-  async function fetchData() {
-    const options = {};
-    options.method = 'GET';
-    options.headers = { Authorization: `Bearer ${import.meta.env.VITE_AIRTABLE_API_TOKEN}` };
-    const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`; //URL for Airtable
+// Function to fetch todo data from Airtable API
+async function fetchData() {
+const options = {};
+options.method = 'GET';
+options.headers = { Authorization: `Bearer ${import.meta.env.VITE_AIRTABLE_API_TOKEN}` }; //API token for Airtable
+const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`; //URL for Airtable
     
-    try {
-    const response = await fetch(url, options);
-    if (!response.ok) {
-    throw new Error(`Error: ${response.status}`);
-    }
-    const data = await response.json();
-    const todos = data.records.map((record) => ({
-    title: record.fields.title,
-    id: record.id
-    }));
-    setTodoList(todos);
-    setIsLoading(false);
-    } catch (error) {
-    console.log(error.message);
-    }
-  }
+try {
+const response = await fetch(url, options);
+if (!response.ok) {
+throw new Error(`Error: ${response.status}`);
+}
+const data = await response.json();
+// Transform Airtable records into todo objects
+const todos = data.records.map((record) => ({
+title: record.fields.title,
+id: record.id
+}));
+setTodoList(todos);
+setIsLoading(false);
+} catch (error) {
+console.log(error.message);
+}
+}
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+// Effect hook to fetch data on component mount
+useEffect(() => {
+fetchData();
+}, []);
 
-  useEffect(() => {
-  new Promise((resolve, reject) => {
-  setTimeout(() => {
-  resolve();
-  }, 2000);
-  }).then(() => {
-  setIsLoading(false); //set to false after 2 seconds
-  });
-  }, []);
+// Effect hook to simulate loading delay
+useEffect(() => {
+new Promise((resolve, reject) => {
+setTimeout(() => {
+resolve();
+}, 2000);
+}).then(() => {
+setIsLoading(false); //set to false after 2 seconds
+});
+}, []);
 
-  useEffect(() => {
-  if (!isLoading) {
-  localStorage.setItem('savedTodoList', JSON.stringify(todoList));  //save the todoList inside localStorage with the key "savedTodoList"
-  }
-  }, [todoList, isLoading]);
+// Effect hook to save todoList to localStorage when it changes
+useEffect(() => {
+if (!isLoading) {
+localStorage.setItem('savedTodoList', JSON.stringify(todoList));  //save the todoList inside localStorage with the key "savedTodoList"
+}
+}, [todoList, isLoading]);
 
   // Updated addTodo function with POST feature to Airtable API
   async function addTodo(newTodo) {
@@ -101,18 +107,28 @@ function App() {
     setTodoList(newTodoList);
   }
   
-  //replaced the outer <div> with fragment
+  // Render the app with React Router setup
   return (
-  <Fragment> 
-  <h1>Todo List</h1>
-  <AddTodoForm onAddTodo={addTodo} />
-  {isLoading ? (
-  <p>Loading...</p>
-  ) : (
-  <TodoList todoList={todoList} onRemoveTodo={removeTodo}/>
-  )}
-  </Fragment>
-  );
+    <BrowserRouter>
+    <Routes>
+    <Route path="/" element={ // Home route
+    <Fragment>
+    <h1>Todo List</h1>    
+    <AddTodoForm onAddTodo={addTodo} />  
+    {isLoading ? (
+    <p>Loading...</p> // Display loading message while fetching data
+    ) : (
+    <TodoList todoList={todoList} onRemoveTodo={removeTodo}/> // Display list of todos
+    )}
+    </Fragment>
+    } />
+    <Route path="/new" element={ //Route path for New Todo List
+    <h1>New Todo List</h1> //New Todo List heading tested at http://localhost:5173/new
+    } />
+    </Routes>
+    </BrowserRouter>
+    );
+  
 }
 
 export default App;
