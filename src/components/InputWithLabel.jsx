@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import PropTypes from 'prop-types'; // Import PropTypes from the "prop-types" package
 
 const InputWithLabel = ({ todoTitle, handleTitleChange, children }) => {
   // Create a ref to store a reference to the input DOM element
@@ -22,6 +23,12 @@ const InputWithLabel = ({ todoTitle, handleTitleChange, children }) => {
   />
   </React.Fragment>
   );
+};
+
+InputWithLabel.propTypes = { //Added the propTypes property to the InputWithLabel function after its definition
+handleTitleChange: PropTypes.func, //defined a property with key todoTitle and value PropTypes.func    NEED TO CHANGE PROP NAME(check if correct)
+todoTitle: PropTypes.string,
+children: PropTypes.node
 };
 
 export default InputWithLabel;
