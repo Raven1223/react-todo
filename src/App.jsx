@@ -1,8 +1,9 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'; // Import BrowserRouter, Routes, and Route from react-router-dom
-import TodoList from './TodoList';
-import AddTodoForm from './AddTodoForm';
+import TodoList from './components/TodoList';
+import AddTodoForm from './components/AddTodoForm';
 import axios from 'axios'; //from Textbook, not being used currently 
+import PropTypes from 'prop-types'; // Import PropTypes from the "prop-types" package
 //const apiKey = import.meta.env.VITE_API_KEY; //import API key from environment file
 //const apiUrl = import.meta.env.VITE_API_URL; //import API URL from env file
 
@@ -30,7 +31,7 @@ const data = await response.json();
 // Transform Airtable records into todo objects
 const todos = data.records.map((record) => ({
 title: record.fields.title,
-id: record.id
+id: record.id.toString() // Convert id to string
 }));
 setTodoList(todos);
 setIsLoading(false);
@@ -91,7 +92,7 @@ localStorage.setItem('savedTodoList', JSON.stringify(todoList));  //save the tod
       // Parse the response from Airtable
       const data = await response.json();
       // Create a new todo object with the response data
-      const createdTodo = { id: data.id, title: data.fields.title };
+      const createdTodo = { id: data.id.toString(), title: data.fields.title };
       // Update the local state with the new todo
       setTodoList((prevTodoList) => [...prevTodoList, createdTodo]);
     } catch (error) {

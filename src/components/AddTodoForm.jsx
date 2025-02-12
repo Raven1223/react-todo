@@ -1,5 +1,6 @@
 import * as React from 'react';
 import InputWithLabel from './InputWithLabel';
+import PropTypes from 'prop-types'; // Import PropTypes from the "prop-types" package
 
 function AddTodoForm({ onAddTodo }) {
   // State to manage the todo title input
@@ -37,5 +38,9 @@ function AddTodoForm({ onAddTodo }) {
     </form>
   );
 }
+
+AddTodoForm.propTypes = { //Added the propTypes property to the AddTodoForm function after its definition
+onAddTodo: PropTypes.func //defined a property with key onAddTodo and value PropTypes.func
+};
 
 export default AddTodoForm;

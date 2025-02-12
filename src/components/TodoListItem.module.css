@@ -2,11 +2,8 @@
     color: rgb(3, 3, 24);
 }
 /*change background color*/
-body {
-    /*background-color: #414c57;
-    color: #238da0;
-    font-family: 'Roboto', sans-serif; */
-    background-image: url('https://images.unsplash.com/photo-1547626740-02cb6aed9ef8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+body {    
+  background-image: url('https://images.unsplash.com/photo-1547626740-02cb6aed9ef8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); 
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
