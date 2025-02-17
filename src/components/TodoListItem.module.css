@@ -1,105 +1,125 @@
-.ListItem {
-    color: rgb(3, 3, 24);
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
-/*change background color*/
-body {    
-  background-image: url('https://images.unsplash.com/photo-1547626740-02cb6aed9ef8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); 
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-image: url('https://as2.ftcdn.net/v2/jpg/03/38/15/75/1000_F_338157516_dSIrnO6aM7w0YP7KleG2bQe3S29WnjFH.jpg'); 
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  }
-  /*customize the appearance of all heading elements, bold weight, sizing*/
-  h1, h2, h3, h4, h5, h6 {
-    color: #d5d7db;
-    font-weight: 700;
-    margin-bottom: 1rem;
-  }
-  
-  h1 { font-size: 2.8rem; }
-  h2 { font-size: 2rem; }
-  h3 { font-size: 1.75rem; }
-  h4 { font-size: 1.5rem; }
-  h5 { font-size: 1.25rem; }
-  h6 { font-size: 1rem; }
-  
-  /*style navigation items, creating a horizontal layout, hover effects*/
-  .nav-list {
-    display: flex;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .nav-list li {
-    margin-right: 1rem;
-  }
-  
-  .nav-list li a {
-    color: #4a5568;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s ease;
-  }
-  
-  .nav-list li a:hover {
-    color: #2b6cb0;
-  }
-  
-  /*customize the appearance of input fields, textareas, and buttons*/
-  input[type="text"], select, textarea, button {
-    width: 100%;
-    padding: 0.75rem;
-    margin-bottom: 1rem;
-    border: 1px solid #cbd5e0;
-    border-radius: 4px;
-    font-family: inherit;
-  }
-  
-  button {
-    background-color: #4299e1;
-    color: white;
+  font-family: 'Roboto', sans-serif;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px;
+}
+
+.ListItem {
+    color: rgb(238, 196, 10);
     font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #3182ce;
-  }
-  
+    font-size: larger;
+}
+
+/*customize the appearance of all heading elements, bold weight, sizing*/
+h1, h2, h3, h4, h5, h6 {
+  color: #13e973;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+h1 { font-size: 2.8rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+h5 { font-size: 1.25rem; }
+h6 { font-size: 1rem; }
+
+/*style navigation items, creating a horizontal layout, hover effects*/
+.nav-list {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-list li {
+  margin-right: 1rem;
+}
+
+.nav-list li a {
+  color: #4a5568;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-list li a:hover {
+  color: #2b6cb0;
+}
+
+/*customize the appearance of input fields, textareas, and buttons*/
+input[type="text"], select, textarea, button {  
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 4px;
+  font-family: inherit;    
+}
+
+button {
+  background-color: #21405a;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #3182ce;
+}
+
 /*Make sure it is responsive across different device sizes*/
-  @media screen and (max-width: 768px) {
-    body {
-      font-size: 14px;
-    }
-  
-    .nav-list {
-      flex-direction: column;
-    }
-  
-    .nav-list li {
-      margin-right: 0;
-      margin-bottom: 0.5rem;
-    }
-  
-    h1 { font-size: 2rem; }
-    h2 { font-size: 1.75rem; }
-    h3 { font-size: 1.5rem; }
-    h4 { font-size: 1.25rem; }
-    h5 { font-size: 1rem; }
-    h6 { font-size: 0.875rem; }
-  }  
-  
-  @media screen and (max-width: 480px) {
-    body {
-      font-size: 12px;
-    }
-  
-    input[type="text"], select, textarea, button {
-      padding: 0.5rem;
-    }
+@media screen and (max-width: 768px) {
+  body {
+    font-size: 14px;
   }
-  
-  /* Load Google Font */
-  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
-  
+
+  .nav-list {
+    flex-direction: column;
+  }
+
+  .nav-list li {
+    margin-right: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.75rem; }
+  h3 { font-size: 1.5rem; }
+  h4 { font-size: 1.25rem; }
+  h5 { font-size: 1rem; }
+  h6 { font-size: 0.875rem; }
+}  
+
+@media screen and (max-width: 480px) {
+  body {
+    font-size: 12px;
+  }
+
+  input[type="text"], select, textarea, button {
+    padding: 0.5rem;
+  }
+}
+
+/* Load Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
