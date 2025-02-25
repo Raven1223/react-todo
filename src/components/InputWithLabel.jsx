@@ -9,7 +9,7 @@ const InputWithLabel = ({ todoTitle, handleTitleChange, children }) => {
   useEffect(() => {
     // Focus the input element
     inputRef.current.focus();
-  }); // No dependency array means this effect runs after every render
+  }, []); // Empty dependency array means this effect runs only once after initial render
 
   return (
   <React.Fragment>
@@ -26,7 +26,7 @@ const InputWithLabel = ({ todoTitle, handleTitleChange, children }) => {
 };
 
 InputWithLabel.propTypes = { //Added the propTypes property to the InputWithLabel function after its definition
-handleTitleChange: PropTypes.func, //defined a property with key todoTitle and value PropTypes.func    NEED TO CHANGE PROP NAME(check if correct)
+handleTitleChange: PropTypes.func, //defined a property with key handleTitleChange and value PropTypes.func
 todoTitle: PropTypes.string,
 children: PropTypes.node
 };
