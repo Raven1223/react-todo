@@ -1,3 +1,15 @@
+nav ul {
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;  
+}
+
+nav ul li {
+  margin-right: 60px; /* Adjust as needed */
+}
+
+
 html, body {
   height: 100%;
   margin: 0;
@@ -35,7 +47,7 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 1rem;
 }
 
-h1 { font-size: 2.8rem; }
+h1 { font-size: 3.2rem; }
 h2 { font-size: 2rem; }
 h3 { font-size: 1.75rem; }
 h4 { font-size: 1.5rem; }
@@ -46,13 +58,19 @@ h6 { font-size: 1rem; }
 .nav-list {
   display: flex;
   justify-content: center;
-  list-style: none;
+  list-style-type: none;
   padding: 0;
   margin: 0;
 }
 
 .nav-list li {
   margin-right: 1rem;
+}
+
+p {
+  font-size: 1.1rem;
+  
+  color: #cf7419;
 }
 
 .nav-list li a {
@@ -120,6 +138,19 @@ button:hover {
     padding: 0.5rem;
   }
 }
+
+@media screen and (max-width: 768px) {
+  .nav-list li a {
+    font-size: 1rem; /* Adjust this value for smaller screens */
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .nav-list li a {
+    font-size: 0.9rem; /* Adjust this value for even smaller screens */
+  }
+}
+
 
 /* Load Google Font */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
