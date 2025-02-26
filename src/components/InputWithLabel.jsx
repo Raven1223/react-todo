@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import PropTypes from 'prop-types'; // Import PropTypes from the "prop-types" package
+import PropTypes from 'prop-types'; 
 
 const InputWithLabel = ({ todoTitle, handleTitleChange, children }) => {
   // Create a ref to store a reference to the input DOM element

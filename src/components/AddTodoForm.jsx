@@ -11,7 +11,6 @@ function AddTodoForm({ onAddTodo }) {
     const newTodoTitle = event.target.value;
     setTodoTitle(newTodoTitle);
   }
-
   // Handler for form submission
   function handleAddTodo(event) {
     event.preventDefault();
@@ -20,9 +19,7 @@ function AddTodoForm({ onAddTodo }) {
       title: todoTitle,
       id: Date.now()
     };
-
-    console.log(newTodo);
-    // Call the onAddTodo function passed as a prop
+        // Call the onAddTodo function passed as a prop
     onAddTodo(newTodo);
     // Reset the input field
     setTodoTitle('');
@@ -39,8 +36,8 @@ function AddTodoForm({ onAddTodo }) {
   );
 }
 
-AddTodoForm.propTypes = { //Added the propTypes property to the AddTodoForm function after its definition
-onAddTodo: PropTypes.func //defined a property with key onAddTodo and value PropTypes.func
+AddTodoForm.propTypes = { 
+onAddTodo: PropTypes.func 
 };
 
 export default AddTodoForm;

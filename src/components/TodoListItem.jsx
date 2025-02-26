@@ -1,6 +1,6 @@
 import React from 'react';
 import style from './TodoListItem.module.css';
-import PropTypes from 'prop-types'; // Import PropTypes from the "prop-types" package
+import PropTypes from 'prop-types'; 
 
 function TodoListItem({ todo, onRemoveTodo, onToggleComplete }) {
   const formatDate = (dateString) => {
