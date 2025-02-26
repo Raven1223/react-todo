@@ -18,14 +18,6 @@ onToggleComplete={onToggleComplete}
 );
 }
 
-/*TodoList.propTypes = { //Added the propTypes property to the TodoList function after its definition
-onRemoveTodo: PropTypes.func, //defined a property with key onRemoveTodo and value PropTypes.func
-todoList: PropTypes.arrayOf(PropTypes.shape( //todoList has an Id that is a string and a title that is also a string
-{id: PropTypes.string,
-title: PropTypes.string}    
-))   
-};
-*/
 TodoList.propTypes = {
     onRemoveTodo: PropTypes.func,
     onToggleComplete: PropTypes.func,

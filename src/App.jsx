@@ -4,8 +4,6 @@ import TodoList from './components/TodoList';
 import AddTodoForm from './components/AddTodoForm';
 import axios from 'axios'; //from Textbook, not being used currently 
 import PropTypes from 'prop-types'; // Import PropTypes from the "prop-types" package
-//const apiKey = import.meta.env.VITE_API_KEY; //import API key from environment file
-//const apiUrl = import.meta.env.VITE_API_URL; //import API URL from env file
 
 function App() {
   // Create new state variable for todoList, initializing from localStorage
@@ -45,8 +43,7 @@ function App() {
       headers: {
         Authorization: `Bearer ${import.meta.env.VITE_AIRTABLE_API_TOKEN}`
       }
-    };    
-    //const url = 'https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}';
+    };        
     const url = `https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${tableName}?view=Grid%20view&sort[0][field]=${sortField}&sort[0][direction]=${sortOrder}`; //URL for Airtable with view parameter and sorting
     
     try {
