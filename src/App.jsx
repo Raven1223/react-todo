@@ -1,10 +1,7 @@
 import React, { useState, useEffect, Fragment, useCallback } from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'; // Added Link for navigation
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'; 
 import TodoList from './components/TodoList';
 import AddTodoForm from './components/AddTodoForm';
-import axios from 'axios'; //from Textbook, not being used currently 
-import PropTypes from 'prop-types'; // Import PropTypes from the "prop-types" package
-
 function App() {
   // Create new state variable for todoList, initializing from localStorage
   const [todoList, setTodoList] = useState(() => {
@@ -14,7 +11,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState('asc');
   const [sortField, setSortField] = useState('Title');
-  const [tableName, setTableName] = useState(import.meta.env.VITE_TABLE_NAME); // Added tableName state
+  const [tableName] = useState(import.meta.env.VITE_TABLE_NAME); 
 
   const toggleSortOrder = useCallback(() => {
     setSortOrder(prevOrder => prevOrder === 'asc' ? 'desc' : 'asc');
@@ -64,7 +61,7 @@ function App() {
     } catch (error) {
       console.log(error.message);
     }
-  }, [sortField, sortOrder, sortTodos, tableName]); // Added tableName as dependency
+  }, [sortField, sortOrder, sortTodos, tableName]); 
 
   // Effect hook to fetch data on component mount and when sort order changes
   useEffect(() => {
@@ -96,23 +93,57 @@ function App() {
 
   //Effect hook to re-sort new todo list page
   // Effect hook to re-sort newTodoList when sortOrder or sortField changes
-useEffect(() => {
-  setNewTodoList(prevNewTodoList => sortTodos([...prevNewTodoList]));
-}, [sortOrder, sortField, sortTodos]);
+  useEffect(() => {
+    setNewTodoList(prevNewTodoList => sortTodos([...prevNewTodoList]));
+  }, [sortOrder, sortField, sortTodos]);
 
-  // Updated addTodo function without POST feature
-  function addTodo(newTodo) {
-    const createdTodo = { 
-      id: Date.now().toString(), 
-      title: newTodo.title, 
-      createdTime: new Date().toISOString(), 
-      completedTime: null,
-      completed: false  // Initialize completed as false
+  async function addTodo(newTodo) {
+    const tempId = Date.now().toString();
+    const todoToAdd = {
+      id: tempId,
+      title: newTodo.title,
+      createdTime: new Date().toISOString(),
+      completed: false
     };
-    setTodoList(prevTodoList => sortTodos([...prevTodoList, createdTodo]));
-  }
-  
 
+    // Update state immediately
+    setTodoList(prevTodoList => sortTodos([...prevTodoList, todoToAdd]));
+
+    // Then sync with Airtable
+    const createdTodo = { 
+      fields: {
+        title: newTodo.title,
+        completed: false
+      }
+    };
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${import.meta.env.VITE_AIRTABLE_API_TOKEN}`
+      },
+      body: JSON.stringify(createdTodo)
+    };
+
+    try {
+      const response = await fetch(`https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${tableName}`, options);
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+      const data = await response.json();
+      // Update the todo with the actual Airtable ID
+      setTodoList(prevTodoList => prevTodoList.map(todo => 
+        todo.id === tempId ? {...todo, id: data.id} : todo
+      ));
+    } catch (error) {
+      console.log(error.message);
+      // If there's an error, we'll keep the todo in the list but mark it as unsaved
+      setTodoList(prevTodoList => prevTodoList.map(todo => 
+        todo.id === tempId ? {...todo, unsaved: true} : todo
+      ));
+    }
+  }
   function toggleTodoComplete(id) {
     setTodoList(prevTodoList => {
       return prevTodoList.map(todo => 
@@ -120,50 +151,60 @@ useEffect(() => {
       );
     });
   }
-  
-
-  // New removeTodo function
-  function removeTodo(id) {
-    // Remove the item with the given id from todoList
+  async function removeTodo(id) {
+    // Remove from state immediately
     setTodoList(prevTodoList => {
       const newTodoList = prevTodoList.filter((todo) => todo.id !== id);
       return sortTodos(newTodoList);
     });
+
+    // Then sync with Airtable
+    const options = {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${import.meta.env.VITE_AIRTABLE_API_TOKEN}`
+      }
+    };
+
+    try {
+      const response = await fetch(`https://api.airtable.com/v0/${import.meta.env.VITE_AIRTABLE_BASE_ID}/${tableName}/${id}`, options);
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+    } catch (error) {
+      console.log(error.message);
+      // If there's an error, add the todo back to the list
+      fetchData(); // Re-fetch the data from Airtable to ensure consistency
+    }
   }
-
   //New todo list
-const [newTodoList, setNewTodoList] = useState([]);
+  const [newTodoList, setNewTodoList] = useState([]);
 
-//function to add new todos to a new list
-function addNewTodo(newTodo) {
-  const createdTodo = { 
-    id: Date.now().toString(), 
-    title: newTodo.title, 
-    createdTime: new Date().toISOString(), 
-    completedTime: null,
-    completed: false
-  };
-  setNewTodoList(prevTodoList => sortTodos([...prevTodoList, createdTodo]));
-}
-
-function toggleNewTodoComplete(id) {
-  setNewTodoList(prevTodoList => {
-    const updatedList = prevTodoList.map(todo => 
-      todo.id === id ? { ...todo, completed: !todo.completed, completedTime: !todo.completed ? new Date().toISOString() : null } : todo
-    );
-    return sortTodos(updatedList);
-  });
-}
-
-function removeNewTodo(id) {
-  setNewTodoList(prevTodoList => {
-    const updatedList = prevTodoList.filter((todo) => todo.id !== id);
-    return sortTodos(updatedList);
-  });
-}
-
-
-  
+  //function to add new todos to a new list
+  function addNewTodo(newTodo) {
+    const createdTodo = { 
+      id: Date.now().toString(), 
+      title: newTodo.title, 
+      createdTime: new Date().toISOString(), 
+      completedTime: null,
+      completed: false
+    };
+    setNewTodoList(prevTodoList => sortTodos([...prevTodoList, createdTodo]));
+  }
+  function toggleNewTodoComplete(id) {
+    setNewTodoList(prevTodoList => {
+      const updatedList = prevTodoList.map(todo => 
+        todo.id === id ? { ...todo, completed: !todo.completed, completedTime: !todo.completed ? new Date().toISOString() : null } : todo
+      );
+      return sortTodos(updatedList);
+    });
+  }
+  function removeNewTodo(id) {
+    setNewTodoList(prevTodoList => {
+      const updatedList = prevTodoList.filter((todo) => todo.id !== id);
+      return sortTodos(updatedList);
+    });
+  }
   // Render the app with React Router setup
   return (
     <BrowserRouter>
@@ -193,33 +234,31 @@ function removeNewTodo(id) {
               Sort by {sortField === 'Title' ? 'Date Created' : 'Title'}
             </button>
             {isLoading ? (
-              <p>Loading...</p> // Display loading message while fetching data
+              <p>Loading...</p> 
             ) : (
               <TodoList todoList={todoList} onRemoveTodo={removeTodo} onToggleComplete={toggleTodoComplete}/> // Display list of todos
             )}
           </Fragment>
         } />
         <Route path="/new" element={
-  <Fragment>
-    <h1>New Todo List</h1>
-    <AddTodoForm onAddTodo={addNewTodo} />
-    <button onClick={toggleSortOrder}>
-      Sort {sortOrder === 'asc' ? 'Descending' : 'Ascending'}
-    </button>
-    <button onClick={toggleSortField}>
-      Sort by {sortField === 'Title' ? 'Date Created' : 'Title'}
-    </button>
-    <TodoList 
-      todoList={newTodoList} 
-      onRemoveTodo={removeNewTodo} 
-      onToggleComplete={toggleNewTodoComplete}
-    />
-  </Fragment>
-} />
-
+          <Fragment>
+            <h1>New Todo List</h1>
+            <AddTodoForm onAddTodo={addNewTodo} />
+            <button onClick={toggleSortOrder}>
+              Sort {sortOrder === 'asc' ? 'Descending' : 'Ascending'}
+            </button>
+            <button onClick={toggleSortField}>
+              Sort by {sortField === 'Title' ? 'Date Created' : 'Title'}
+            </button>
+            <TodoList 
+              todoList={newTodoList} 
+              onRemoveTodo={removeNewTodo} 
+              onToggleComplete={toggleNewTodoComplete}
+            />
+          </Fragment>
+        } />
       </Routes>
     </BrowserRouter>
   );
 }
-
 export default App;

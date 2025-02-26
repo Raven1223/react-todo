@@ -2,7 +2,7 @@ import * as React from 'react';
 import TodoListItem from './TodoListItem'; // Import TodoListItem component
 import PropTypes from 'prop-types'; // Import PropTypes from the "prop-types" package
 
-function TodoList({ todoList, onRemoveTodo, onToggleComplete }) { // Add props as a parameter to the TodoList functional component
+function TodoList({ todoList, onRemoveTodo, onToggleComplete }) { 
 return (
 <ul>
 {todoList.map(function(todo) {
@@ -28,5 +28,4 @@ TodoList.propTypes = {
     }))
   };
   
-
 export default TodoList;
